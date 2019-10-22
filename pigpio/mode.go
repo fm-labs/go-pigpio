@@ -36,14 +36,18 @@ type Mode int
 
 // mode
 const (
-	Input  Mode = C.PI_INPUT
-	Output Mode = C.PI_OUTPUT
-	Alt0   Mode = C.PI_ALT0
-	Alt1   Mode = C.PI_ALT1
-	Alt2   Mode = C.PI_ALT2
-	Alt3   Mode = C.PI_ALT3
-	Alt4   Mode = C.PI_ALT4
-	Alt5   Mode = C.PI_ALT5
+	Input												Mode = C.PI_INPUT
+	Output											Mode = C.PI_OUTPUT
+	Alt0												Mode = C.PI_ALT0
+	Alt1												Mode = C.PI_ALT1
+	Alt2												Mode = C.PI_ALT2
+	Alt3												Mode = C.PI_ALT3
+	Alt4												Mode = C.PI_ALT4
+	Alt5												Mode = C.PI_ALT5
+	PI_WAVE_MODE_ONE_SHOT				Mode = C.PI_WAVE_MODE_ONE_SHOT
+	PI_WAVE_MODE_REPEA					Mode = C.PI_WAVE_MODE_REPEAT
+	PI_WAVE_MODE_ONE_SHOT_SYNC	Mode = C.PI_WAVE_MODE_ONE_SHOT_SYNC
+	PI_WAVE_MODE_REPEAT_SYNC		Mode = C.PI_WAVE_MODE_REPEAT_SYNC
 )
 
 func (mode Mode) String() (s string) {
