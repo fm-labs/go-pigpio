@@ -39,6 +39,7 @@ extern int goSetAlertFunc(unsigned userGpio, int cbi);
 extern int goSetTimerFunc(unsigned timer, unsigned millis, int cbi);
 */
 import "C"
+import "unsafe"
 import (
 	"fmt"
 	"time"
@@ -303,6 +304,18 @@ gpioDeleteScriptDelete a stored script
 /*******************************************************************************
 * Waves
 *******************************************************************************/
+
+// Helper function to create a Pulse object which can be referenced
+// as C-type gpioPulse_t
+func MakePulse(gpioOn uint, gpioOff uint, usDelay uint) (p Pulse) {
+	p = Pulse {
+		gpioOn: C.unsigned(gpioOn),
+		gpioOff: C.unsigned(gpioOff),
+		usDelay: C.unsigned(usDelay),
+	}
+	return p
+}
+
 
 /*
 gpioWaveClearDeletes all waveforms
