@@ -1,5 +1,3 @@
-// +build ignore
-
 package pigpio
 
 // #include <pigpio.h>
