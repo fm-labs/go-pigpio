@@ -102,6 +102,10 @@ const WaveModeRepeatSync = C.PI_WAVE_MODE_REPEAT_SYNC
 // special wave at return values
 const WaveNotFound = C.PI_WAVE_NOT_FOUND
 const NoTxWave = C.PI_NO_TX_WAVE
+const EmptyWaveform = C.PI_EMPTY_WAVEFORM
+const TooManyCBS = C.PI_TOO_MANY_CBS
+const TooManyOOL = C.PI_TOO_MANY_OOL
+const NoWaveformId = C.PI_NO_WAVEFORM_ID
 
 // Files, I2C, SPI, SER
 const FileSlots = C.PI_FILE_SLOTS

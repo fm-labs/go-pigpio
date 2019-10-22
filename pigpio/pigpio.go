@@ -304,6 +304,23 @@ gpioDeleteScriptDelete a stored script
 /*******************************************************************************
 * Waves
 *******************************************************************************/
+// GpioWaveClear Deletes all waveforms
+func GpioWaveClear() (err error) {
+	cErr := int(C.gpioWaveClear()))
+	if cErr != 0 {
+		err = Errno(cErr)
+	}
+	return
+}
+
+// GpioWaveAddNew Starts a new waveform
+func GpioWaveAddNew() (err error) {
+	cErr := int(C.gpioWaveAddNew()))
+	if cErr != 0 {
+		err = Errno(cErr)
+	}
+	return
+}
 
 // Helper function to create a Pulse object which can be referenced
 // as C-type gpioPulse_t
@@ -331,28 +348,49 @@ func GpioWaveAddGeneric(numPulses uint, pulses []Pulse) (uint totalPulses, err e
 	return
 }
 
-/*
-gpioWaveClearDeletes all waveforms
-gpioWaveAddNewStarts a new waveform
-gpioWaveAddGenericAdds a series of pulses to the waveform
-gpioWaveAddSerialAdds serial data to the waveform
-gpioWaveCreateCreates a waveform from added data
-gpioWaveDeleteDeletes a waveform
-gpioWaveTxSendTransmits a waveform
-gpioWaveChainTransmits a chain of waveforms
-gpioWaveTxAtReturns the current transmitting waveform
-gpioWaveTxBusyChecks to see if the waveform has ended
-gpioWaveTxStopAborts the current waveform
-gpioWaveGetMicrosLength in microseconds of the current waveform
-gpioWaveGetHighMicrosLength of longest waveform so far
-gpioWaveGetMaxMicrosAbsolute maximum allowed micros
-gpioWaveGetPulsesLength in pulses of the current waveform
-gpioWaveGetHighPulsesLength of longest waveform so far
-gpioWaveGetMaxPulsesAbsolute maximum allowed pulses
-gpioWaveGetCbsLength in control blocks of the current waveform
-gpioWaveGetHighCbsLength of longest waveform so far
-gpioWaveGetMaxCbsAbsolute maximum allowed control blocks
-*/
+//gpioWaveAddSerial Adds serial data to the waveform
+
+//GpioWaveCreate Creates a waveform from added data
+func GpioWaveCreate() (wave_id uint) {
+	wave_id = uint(C.gpioWaveCreate())
+	return
+}
+
+//gpioWaveDelete Deletes a waveform
+
+//gpioWaveTxSend Transmits a waveform
+func GpioWaveTxSend(wave_id uint,mode Mode) (err error) {
+  cErr := int(C.gpioWaveTxSend(C.unsigned(wave_id), C.unsigned(mode)))
+  if cErr != 0 {
+          err = Errno(cErr)
+  }
+  return
+}
+
+//gpioWaveChain Transmits a chain of waveforms
+
+//gpioWaveTxAt Returns the current transmitting waveform
+
+//gpioWaveTxBusy Checks to see if the waveform has ended
+
+//gpioWaveTxStop Aborts the current waveform
+func GpioWaveTxStop() (err error) {
+	cErr := int(C.gpioWaveTxStop()))
+	if cErr != 0 {
+		err = Errno(cErr)
+	}
+	return
+}
+
+//gpioWaveGetMicros Length in microseconds of the current waveform
+//gpioWaveGetHighMicros Length of longest waveform so far
+//gpioWaveGetMaxMicros Absolute maximum allowed micros
+//gpioWaveGetPulses Length in pulses of the current waveform
+//gpioWaveGetHighPulses Length of longest waveform so far
+//gpioWaveGetMaxPulses Absolute maximum allowed pulses
+//gpioWaveGetCbs Length in control blocks of the current waveform
+//gpioWaveGetHighCbs Length of longest waveform so far
+//gpioWaveGetMaxCbs Absolute maximum allowed control blocks
 
 /*******************************************************************************
 * I2C
