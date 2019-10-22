@@ -316,6 +316,20 @@ func MakePulse(gpioOn uint, gpioOff uint, usDelay uint) (p Pulse) {
 	return p
 }
 
+// GpioWaveAddGeneric	Adds a series of pulses to the waveform
+// http://abyz.me.uk/rpi/pigpio/cif.html#gpioWaveAddGeneric
+// numPulses: the number of pulses
+// pules: an array of Pulse objects
+func GpioWaveAddGeneric(numPulses uint, pulses []Pulse) (uint totalPulses, err error) {
+	totalPulses := int(C.gpioWaveAddGeneric(C.unsigned(numPulses), (*C.gpioPulse_t)(unsafe.Pointer(&pulses[0])) ))
+	if totalPulses > 0 {
+		// totalPulses = the new total number of pulses in the current waveform if OK, otherwise PI_TOO_MANY_PULSES.
+	} else {
+		// handle error
+		err = Errno(totalPulses)
+	}
+	return
+}
 
 /*
 gpioWaveClearDeletes all waveforms
