@@ -44,10 +44,6 @@ const (
 	Alt3                       Mode = C.PI_ALT3
 	Alt4                       Mode = C.PI_ALT4
 	Alt5                       Mode = C.PI_ALT5
-	PI_WAVE_MODE_ONE_SHOT      Mode = C.PI_WAVE_MODE_ONE_SHOT
-	PI_WAVE_MODE_REPEAT        Mode = C.PI_WAVE_MODE_REPEAT
-	PI_WAVE_MODE_ONE_SHOT_SYNC Mode = C.PI_WAVE_MODE_ONE_SHOT_SYNC
-	PI_WAVE_MODE_REPEAT_SYNC   Mode = C.PI_WAVE_MODE_REPEAT_SYNC
 )
 
 func (mode Mode) String() (s string) {
