@@ -356,7 +356,14 @@ func GpioWaveCreate() (wave_id uint) {
 	return
 }
 
-//gpioWaveDelete Deletes a waveform
+//GpioWaveDelete Deletes a waveform
+func GpioWaveDelete(wave_id uint) (err error) {
+	cErr := int(C.gpioWaveDelete(C.unsigned(wave_id)))
+  if cErr != 0 {
+          err = Errno(cErr)
+  }
+  return
+}
 
 //gpioWaveTxSend Transmits a waveform
 func GpioWaveTxSend(wave_id uint,mode Mode) (err error) {
@@ -372,6 +379,10 @@ func GpioWaveTxSend(wave_id uint,mode Mode) (err error) {
 //gpioWaveTxAt Returns the current transmitting waveform
 
 //gpioWaveTxBusy Checks to see if the waveform has ended
+func GpioWaveTxBusy() (WaveTxBusy uint) {
+	WaveTxBusy = uint(C.gpioWaveTxBusy())
+	return
+}
 
 //gpioWaveTxStop Aborts the current waveform
 func GpioWaveTxStop() (err error) {
@@ -383,15 +394,50 @@ func GpioWaveTxStop() (err error) {
 }
 
 //gpioWaveGetMicros Length in microseconds of the current waveform
+func GpioWaveGetMicros() (WaveGetMicros uint) {
+	WaveGetMicros = uint(C.gpioWaveGetMicros())
+	return
+}
 //gpioWaveGetHighMicros Length of longest waveform so far
+func GpioWaveGetHighMicros() (WaveGetHighMicros uint) {
+	WaveGetHighMicros = uint(C.gpioWaveGetHighMicros())
+	return
+}
 //gpioWaveGetMaxMicros Absolute maximum allowed micros
+func GpioWaveGetMaxMicros() (WaveGetMaxMicros uint) {
+	WaveGetMaxMicros = uint(C.gpioWaveGetMaxMicros())
+	return
+}
 //gpioWaveGetPulses Length in pulses of the current waveform
+func GpioWaveGetPulses() (WaveGetPulses uint) {
+	WaveGetPulses = uint(C.gpioWaveGetPulses())
+	return
+}
 //gpioWaveGetHighPulses Length of longest waveform so far
+func GpioWaveGetHighPulses() (WaveGetHighPulses uint) {
+	WaveGetHighPulses = uint(C.gpioWaveGetHighPulses())
+	return
+}
 //gpioWaveGetMaxPulses Absolute maximum allowed pulses
+func GpioWaveGetMaxPulses() (WaveGetMaxPulses uint) {
+	WaveGetMaxPulses = uint(C.gpioWaveGetMaxPulses())
+	return
+}
 //gpioWaveGetCbs Length in control blocks of the current waveform
+func GpioWaveGetCbs() (WaveGetCbs uint) {
+	WaveGetCbs = uint(C.gpioWaveGetCbs())
+	return
+}
 //gpioWaveGetHighCbs Length of longest waveform so far
+func GpioWaveGetHighCbs() (WaveGetHighCbs uint) {
+	WaveGetHighCbs = uint(C.gpioWaveGetHighCbs())
+	return
+}
 //gpioWaveGetMaxCbs Absolute maximum allowed control blocks
-
+func GpioWaveGetMaxCbs() (WaveGetMaxCbs uint) {
+	WaveGetMaxCbs = uint(C.gpioWaveGetMaxCbs())
+	return
+}
 /*******************************************************************************
 * I2C
 *******************************************************************************/
