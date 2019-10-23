@@ -50,7 +50,7 @@ import (
 *******************************************************************************/
 
 // Initialise returns the pigpio version number if OK, otherwise sets err
-func Initialise() (version uint, err error) {
+func GpioInitialise() (version uint, err error) {
 	versErr := int(C.gpioInitialise())
 	if versErr >= 0 {
 		version = uint(versErr)
@@ -61,7 +61,7 @@ func Initialise() (version uint, err error) {
 }
 
 // Terminates the library (call before program exit)
-func Terminate() {
+func GpioTerminate() {
 	C.gpioTerminate()
 }
 
@@ -70,7 +70,7 @@ func Terminate() {
 *******************************************************************************/
 
 // SetMode sets the GPIO mode
-func SetMode(gpio uint, mode Mode) (err error) {
+func GpioSetMode(gpio uint, mode Mode) (err error) {
 	cErr := int(C.gpioSetMode(C.unsigned(gpio), C.unsigned(mode)))
 	if cErr != 0 {
 		err = Errno(cErr)
@@ -79,7 +79,7 @@ func SetMode(gpio uint, mode Mode) (err error) {
 }
 
 // GetMode gets the GPIO mode
-func GetMode(gpio uint) (mode Mode, err error) {
+func GpioGetMode(gpio uint) (mode Mode, err error) {
 	modeErr := int(C.gpioGetMode(C.unsigned(gpio)))
 	if modeErr >= 0 {
 		mode = Mode(modeErr)
@@ -90,7 +90,7 @@ func GetMode(gpio uint) (mode Mode, err error) {
 }
 
 // SetPullUpDown sets the GPIO pull-up/pull-down resistor mode
-func SetPullUpDown(gpio uint, pud uint) (err error) {
+func GpioSetPullUpDown(gpio uint, pud uint) (err error) {
 	cErr := int(C.gpioSetPullUpDown(C.unsigned(gpio), C.unsigned(pud)))
 	if cErr != 0 {
 		err = Errno(cErr)
@@ -99,7 +99,7 @@ func SetPullUpDown(gpio uint, pud uint) (err error) {
 }
 
 // Read reads the GPIO level (on or off)
-func Read(gpio uint) (level bool, err error) {
+func GpioRead(gpio uint) (level bool, err error) {
 	levelErr := int(C.gpioRead(C.unsigned(gpio)))
 	if levelErr >= 0 {
 		level = levelErr != 0
@@ -110,7 +110,7 @@ func Read(gpio uint) (level bool, err error) {
 }
 
 // Write sets the GPIO level (on or off)
-func Write(gpio uint, level bool) (err error) {
+func GpioWrite(gpio uint, level bool) (err error) {
 	levelUint := uint(0)
 	if level {
 		levelUint = 1
@@ -125,7 +125,7 @@ func Write(gpio uint, level bool) (err error) {
 // PWM starts PWM on the specified GPIO, with a dutycycle between
 // 0 (off) and PWMrange (use SetPWMrange to set the range, which
 // defaults to 255)
-func PWM(gpio uint, dutycycle uint) (err error) {
+func GpioPWM(gpio uint, dutycycle uint) (err error) {
 	cErr := int(C.gpioPWM(C.unsigned(gpio), C.unsigned(dutycycle)))
 	if cErr != 0 {
 		err = Errno(cErr)
@@ -134,7 +134,7 @@ func PWM(gpio uint, dutycycle uint) (err error) {
 }
 
 // GetPWMdutycycle returns the PWM dutycycle setting for the specified GPIO
-func GetPWMdutycycle(gpio uint) (dutycycle uint, err error) {
+func GpioGetPWMdutycycle(gpio uint) (dutycycle uint, err error) {
 	dutycycleErr := int(C.gpioGetPWMdutycycle(C.unsigned(gpio)))
 	if dutycycleErr >= 0 {
 		dutycycle = uint(dutycycleErr)
@@ -148,7 +148,7 @@ func GetPWMdutycycle(gpio uint) (dutycycle uint, err error) {
 // pulsewidth values: 0 (off), 500 (most anti-clockwise) - 2500 (most clockwise)
 // A value of 1500 should always be safe and represents the mid-point of rotation.
 // WARNING: you can DAMAGE a servo if you command it to move beyond its limits.
-func Servo(gpio uint, pulsewidth uint) (err error) {
+func GpioServo(gpio uint, pulsewidth uint) (err error) {
 	cErr := int(C.gpioServo(C.unsigned(gpio), C.unsigned(pulsewidth)))
 	if cErr != 0 {
 		err = Errno(cErr)
@@ -157,7 +157,7 @@ func Servo(gpio uint, pulsewidth uint) (err error) {
 }
 
 // GetServoPulsewidth returns the servo pulsewidth setting for the GPIO
-func GetServoPulsewidth(gpio uint) (pulsewidth uint, err error) {
+func GpioGetServoPulsewidth(gpio uint) (pulsewidth uint, err error) {
 	pulsewidthErr := int(C.gpioGetServoPulsewidth(C.unsigned(gpio)))
 	if pulsewidthErr >= 0 {
 		pulsewidth = uint(pulsewidthErr)
@@ -172,7 +172,7 @@ func GetServoPulsewidth(gpio uint) (pulsewidth uint, err error) {
 // If the requested delay duration is longer than C.UINT32_MAX in Microseconds
 // (which is ~4295s or a little under 72m), the underlying gpioDelay function
 // will be called multiple times to make up the requested duration.
-func Delay(delay time.Duration) (actualDelay time.Duration) {
+func GpioDelay(delay time.Duration) (actualDelay time.Duration) {
 	delayMicros := uint(delay / time.Microsecond)
 	actualDelayMicros := uint(0)
 	for delayMicros > uint(C.UINT32_MAX) {
@@ -192,7 +192,7 @@ func Delay(delay time.Duration) (actualDelay time.Duration) {
 
 // SetAlertFunc registers a callback function to be called when the
 // specified GPIO changes state.
-func SetAlertFunc(gpio uint, alertFunc AlertFunc) (err error) {
+func GpioSetAlertFunc(gpio uint, alertFunc AlertFunc) (err error) {
 	cbi := registerAlertFunc(alertFunc)
 	cErr := C.goSetAlertFunc(C.unsigned(gpio), C.int(cbi))
 	if cErr != 0 {
@@ -219,7 +219,7 @@ func SetTimerFunc(timer uint, period time.Duration, timerFunc TimerFunc) (err er
 
 // Trigger sends a trigger pulse to the specified GPIO
 // GPIO is set to level for duration and then reset to not level
-func Trigger(gpio uint, pulseLen time.Duration, level bool) (err error) {
+func GpioTrigger(gpio uint, pulseLen time.Duration, level bool) (err error) {
 	levelUint := uint(0)
 	if level {
 		levelUint = 1
@@ -234,7 +234,7 @@ func Trigger(gpio uint, pulseLen time.Duration, level bool) (err error) {
 // SetWatchdog sets a watchdog on a GPIO
 // Duration of timeout can range from 0-60s
 // Set timeout to 0 to disable watchdog
-func SetWatchdog(gpio uint, timeout time.Duration) (err error) {
+func GpioSetWatchdog(gpio uint, timeout time.Duration) (err error) {
 	cErr := int(C.gpioSetWatchdog(C.unsigned(gpio), C.unsigned(timeout/time.Millisecond)))
 	if cErr != 0 {
 		err = Errno(cErr)
@@ -242,20 +242,18 @@ func SetWatchdog(gpio uint, timeout time.Duration) (err error) {
 	return
 }
 
-/*
-gpioSetPWMrangeConfigure PWM range for a GPIO
-gpioGetPWMrangeGet configured PWM range for a GPIO
-gpioSetPWMfrequencyConfigure PWM frequency for a GPIO
-gpioGetPWMfrequencyGet configured PWM frequency for a GPIO
-gpioRead_Bits_0_31Read all GPIO in bank 1
-gpioRead_Bits_32_53Read all GPIO in bank 2
-gpioWrite_Bits_0_31_ClearClear selected GPIO in bank 1
-gpioWrite_Bits_32_53_ClearClear selected GPIO in bank 2
-gpioWrite_Bits_0_31_SetSet selected GPIO in bank 1
-gpioWrite_Bits_32_53_SetSet selected GPIO in bank 2
-gpioStartThreadStart a new thread
-gpioStopThreadStop a previously started thread
-*/
+//gpioSetPWMrange Configure PWM range for a GPIO
+//gpioGetPWMrangeGet configured PWM range for a GPIO
+//gpioSetPWMfrequency Configure PWM frequency for a GPIO
+//gpioGetPWMfrequency Get configured PWM frequency for a GPIO
+//gpioRead_Bits_0_31 Read all GPIO in bank 1
+//gpioRead_Bits_32_53 Read all GPIO in bank 2
+//gpioWrite_Bits_0_31_Clear Clear selected GPIO in bank 1
+//gpioWrite_Bits_32_53_Clear Clear selected GPIO in bank 2
+//gpioWrite_Bits_0_31_Set Set selected GPIO in bank 1
+//gpioWrite_Bits_32_53_Set Set selected GPIO in bank 2
+//gpioStartThread Start a new thread
+//gpioStopThread Stop a previously started thread
 
 /*******************************************************************************
 * Advance
